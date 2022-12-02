@@ -73,16 +73,16 @@ dealer_instamce --> instacarro_production_db
 autobid_instance --> instacarro_autobid_db
 timer_instance --> timer_db
 
-dealer_instamce --> dealer_lambda: HTTP
+dealer_instamce --> dealer_lambda: InvokeFunction
 dealer_lambda --> instacarro_production_db: GET-COLLECTIONS
 
-dealer_lambda --> sns
-sns --> sns_send_email
+dealer_lambda --> sns: event:sns
+sns --> sns_send_email: sns:Publish
 ' sns_send_email --> users
 
 price_instance --> queue_redis
 queue_redis --> sns
-sns --> sns_send_email_price
+sns --> sns_send_email_price: sns:Publish
 
 
 @enduml
