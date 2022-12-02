@@ -1,0 +1,21 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+
+title "Context Diagram Instacarro"
+
+Person(client, "Client", "Instacarro client")
+
+System(web, "Web", "Web application")
+System(mobile, "Mobile", "App Mobile")
+
+' System_Ext(web, "API", "API")
+
+
+Rel(client, web,"User", "HTTPS")
+Rel(client, mobile,"User", "HTTPS")
+
+
+
+@enduml
+

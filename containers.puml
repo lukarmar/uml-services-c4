@@ -1,0 +1,71 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+
+
+Person(client, "Client", "Car Auction User")
+
+System_Boundary(car_auction, "Car Auction System") {
+  
+      Container(web_app, "Web Application", "React", "Allows users to view and bid on cars")
+      Container(app_mobile, "App mobile", "React Native", "Allows users to view and bid on cars")
+      Container(start_service, "Start Service", "Nodejs", "start Auctions")
+      
+      Container(manager_service, "Manager Service", "Nodejs", "Manages auctions")
+      Container(finish_auction_service, "Finish Service", "Nodejs", "Finish auctions")
+      Container(price_service, "Price Service", "Nodejs", "Price auctions") 
+      Container(dealer_service, "Dealer Service", "Nodejs", "Dealer vehicle")
+      Container(autobid_service, "Autobid Service", "Nodejs", "Auto bid auctions")
+      Container(api_gatway, "API Gatway", "AWS", "Api Gatway")
+
+  
+  
+      ContainerDb(start_auction_db, "Start Auction DB", "MongoDB")
+      Rel(start_service, start_auction_db, "Start Auctions", "MongoDB")
+
+
+      ContainerDb(manager_service_db, "Start Auction DB", "MongoDB")
+      Rel(manager_service, manager_service_db, "Start Auctions", "MongoDB")
+
+
+      ContainerDb(finish_auction_service_db, "Finish Auction DB", "MongoDB")
+      Rel(finish_auction_service, finish_auction_service_db, "Finish Auctions", "MongoDB")
+      
+      
+      ContainerDb(price_servicen_db, "Price Auction DB", "MongoDB")
+      Rel(price_service, price_servicen_db, "Price Auctions", "MongoDB")
+      
+      
+      ContainerDb(dealer_service_db, "Dealer Vehicles DB", "MongoDB")
+      Rel(dealer_service, dealer_service_db, "Dealer Vehicles", "MongoDB")
+      
+      
+      ContainerDb(autobid_service_db, "Auto Bid Auction DB", "MongoDB")
+      Rel(autobid_service, autobid_service_db, "Auto Bid Auctions", "MongoDB")
+
+
+      Rel(client, web_app, "Uses", "HTTPS")
+      Rel(client, app_mobile, "Uses", "HTTPS")
+
+      Rel(web_app, api_gatway, "Uses", "HTTPS")
+      Rel(app_mobile, api_gatway, "Uses", "HTTPS")
+
+
+      Rel(api_gatway, start_service, "Request", "HTTPS")
+      Rel(api_gatway, manager_service, "Request", "HTTPS")
+      Rel(api_gatway, finish_auction_service, "Request", "HTTPS")
+      Rel(api_gatway, price_service, "Request", "HTTPS")
+      Rel(api_gatway, dealer_service, "Request", "HTTPS")
+      Rel(api_gatway, autobid_service, "Request", "HTTPS")
+
+
+      
+
+
+}
+
+
+
+@enduml

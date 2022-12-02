@@ -1,0 +1,88 @@
+@startuml Two Modes - Technical View
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+
+' Uncomment the following line to create simplified view
+' !include AWSPuml/AWSSimplified.puml
+
+!include AWSPuml/General/Users.puml
+!include AWSPuml/ApplicationIntegration/APIGateway.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/Compute/EC2.puml
+!include AWSPuml/Database/Database.puml
+!include AWSPuml/Database/MemoryDBforRedis.puml
+!include AWSPuml/FrontEndWebMobile/FrontEndWebMobile.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ApplicationIntegration/SimpleNotificationService.puml
+!include AWSPuml/ApplicationIntegration/SimpleNotificationServiceEmailNotification.puml
+
+
+
+
+
+
+left to right direction
+
+Users(users, "Client", "HTTPS CLIENT")
+FrontEndWebMobile(app, "App", "App Clients")
+
+APIGateway(apiConnections, "Connections API", "user apps")
+
+EC2(start_auctions_instance, "Start auction Service", "Start Intance Nodejs") 
+EC2(manage_auctions_instance, "Manage auction Service", "Manager Instance Nodejs")
+EC2(finish_auctions_instance, "Finish Auction Service", "Finish Auctions Instance Nodejs")
+EC2(price_instance, "Price Service", "Price Instance Nodejs")
+EC2(dealer_instamce, "Dealer Service", "Dealer Instance Nodejs")
+EC2(autobid_instance, "Autobid Service", "Autobid Instance Nodejs")
+EC2(timer_instance, "Timer Service", "Timer Instance Nodejs")
+
+
+Database(auctions_db, "AuctionsDB", "SQL - MongoDB")
+Database(instacarro_production_db, "Instacarro Production Database", "MongoDB")
+Database(instacarro_autobid_db, "Instacarro Autobid Database", "MongoDB")
+Database(timer_db, "Timer Database", "MongoDB")
+
+Lambda(dealer_lambda, "Dealer Lambda", "Lambda")
+
+
+SimpleNotificationService(sns, "SNS", "SNS")
+SimpleNotificationServiceEmailNotification(sns_send_email, "Send Email Dealer", "SNS Email")
+
+SimpleNotificationServiceEmailNotification(sns_send_email_price, "Send Email Price Service", "SNS Email")
+
+
+MemoryDBforRedis(queue_redis, "Queue Redis", "Redis")
+
+
+users ---> app
+app --> apiConnections : HTTPS
+apiConnections ---> start_auctions_instance: HTTP
+apiConnections ---> manage_auctions_instance: HTTP
+apiConnections ---> finish_auctions_instance: HTTP
+apiConnections ---> price_instance: HTTP
+apiConnections ---> dealer_instamce: HTTP
+apiConnections ---> autobid_instance: HTTP
+apiConnections ---> timer_instance: HTTP
+
+start_auctions_instance --> auctions_db
+manage_auctions_instance --> auctions_db
+finish_auctions_instance --> auctions_db
+price_instance --> instacarro_production_db
+dealer_instamce --> instacarro_production_db
+autobid_instance --> instacarro_autobid_db
+timer_instance --> timer_db
+
+dealer_instamce --> dealer_lambda: HTTP
+dealer_lambda --> instacarro_production_db: GET-COLLECTIONS
+
+dealer_lambda --> sns
+sns --> sns_send_email
+' sns_send_email --> users
+
+price_instance --> queue_redis
+queue_redis --> sns
+sns --> sns_send_email_price
+
+
+@enduml
