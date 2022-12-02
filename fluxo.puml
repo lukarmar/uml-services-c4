@@ -75,7 +75,7 @@ timer_instance --> timer_db
 
 
 
-' conjunto de lambda functions
+' group lambda functions
 ' sendBids
 ' sendDiferenceAuction
 ' sendEmailAucOngoing
