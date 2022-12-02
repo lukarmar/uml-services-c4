@@ -73,6 +73,17 @@ dealer_instamce --> instacarro_production_db
 autobid_instance --> instacarro_autobid_db
 timer_instance --> timer_db
 
+
+
+' conjunto de lambda functions
+' sendBids
+' sendDiferenceAuction
+' sendEmailAucOngoing
+' sendEmailToDealer
+' sendFCMAuctStart
+' sendIntercomEvents
+' sendPushAuctStart
+' sendWinningBids
 dealer_instamce --> dealer_lambda: InvokeFunction
 dealer_lambda --> instacarro_production_db: GET-COLLECTIONS
 
